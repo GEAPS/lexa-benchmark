@@ -5,7 +5,7 @@
 
 import torch
 import numpy as np
-from envs.sibrivalry.ant_maze.create_maze_env import create_maze_env
+from envs.ant_maze.create_maze_env import create_maze_env
 
 
 

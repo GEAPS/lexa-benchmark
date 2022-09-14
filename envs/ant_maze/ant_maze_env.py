@@ -13,8 +13,8 @@
 # limitations under the License.
 # ==============================================================================
 
-from envs.sibrivalry.ant_maze.maze_env import MazeEnv
-from envs.sibrivalry.ant_maze.ant import AntEnv
+from envs.ant_maze.maze_env import MazeEnv
+from envs.ant_maze.ant import AntEnv
 
 
 class AntMazeEnv(MazeEnv):

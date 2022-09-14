@@ -8,7 +8,7 @@ import torch.nn as nn
 import numpy as np
 import torch.distributed as dist
 from torch.distributions import Normal, Beta
-from envs.sibrivalry.ant_maze.create_maze_env import create_maze_env
+from envs.ant_maze.create_maze_env import create_maze_env
 
 
 

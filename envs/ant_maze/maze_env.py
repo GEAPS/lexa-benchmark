@@ -23,7 +23,7 @@ import numpy as np
 import gym
 import random
 
-from envs.sibrivalry.ant_maze import maze_env_utils
+from envs.ant_maze import maze_env_utils
 
 # Directory that contains mujoco xml files.
 MODEL_DIR = os.path.join(os.path.dirname(__file__), 'assets')

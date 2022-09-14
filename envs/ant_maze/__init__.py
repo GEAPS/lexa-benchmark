@@ -12,7 +12,7 @@ from envs.ant_maze import maze_env_utils
 
 class AntMazeEnv(gym.GoalEnv):
   """Wraps the HIRO/SR Ant Environments in a gym goal env."""
-  def __init__(self, variant='AntMaze-SR', env_max_steps=500, eval=False):
+  def __init__(self, variant='AntMaze-U-SR', env_max_steps=500, eval=False):
 
     self.done_env = False
     
@@ -20,8 +20,8 @@ class AntMazeEnv(gym.GoalEnv):
     state_dims = 30
     self._process_goal = None
     self.goal_dim = 0
-    if 'antmaze' in variant:
-      mazeinfo = variant.split('-')
+    if 'antmaze' in variant.lower():
+      mazeinfo = variant.lower().split('-')
       goal_type = "sr"
       shape = "s"
 
@@ -145,7 +145,7 @@ class AntMazeEnv(gym.GoalEnv):
       'image': s,
       'state': s,
       'goal': self.g_xy,
-      'desired_goal': self.g_xy,
+      'image_goal': self.g_xy,
       'achieved_goal': s_xy
     }
 
