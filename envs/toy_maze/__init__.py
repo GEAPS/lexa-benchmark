@@ -73,7 +73,8 @@ class PointMaze2D(gym.GoalEnv):
       'image': s_xy,
       'state': s_xy,
       'goal': self.g_xy,
-      'image_goal': self.g_xy
+      'image_goal': self.g_xy,
+      'achieved_goal': s_xy
     }
 
 
@@ -94,7 +95,8 @@ class PointMaze2D(gym.GoalEnv):
       'image': s_xy,
       'state': s_xy,
       'goal': self.g_xy,
-      'image_goal': self.g_xy
+      'image_goal': self.g_xy,
+      'achieved_goal': s_xy
     }
     return obs
 
