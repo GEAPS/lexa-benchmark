@@ -12,7 +12,7 @@ class PointMaze2D(gym.GoalEnv):
   """Wraps the Sibling Rivalry 2D point maze in a gym goal env.
   Keeps the first visit done and uses -1/0 rewards.
   """
-  def __init__(self, env_max_steps, test=False):
+  def __init__(self, env_max_steps, test=False, grid_pos=False):
     super().__init__()
     # n is the maximum steps - should be controlled.
     # during training, the tasks is marked as never done.
@@ -35,11 +35,13 @@ class PointMaze2D(gym.GoalEnv):
     self.max_steps = env_max_steps # 50 most of the time.
     self.num_steps = 0
     self.test = test
+    self.grid_pos = grid_pos
 
   def seed(self, seed=None):
     self.action_space.seed(seed=seed)
     return self.maze.seed(seed=seed)
 
+  # TODO (lisheng) Add the wall information as a one-hot four dimensional vector.
   def step(self, action):
     try:
       s_xy = np.array(self.maze.move(tuple(self.s_xy), tuple(action)))
@@ -48,6 +50,7 @@ class PointMaze2D(gym.GoalEnv):
       raise
 
     self.s_xy = s_xy
+    wall_info = self.maze.get_wall_info(s_xy)
     reward = self.compute_reward(s_xy, self.g_xy, None)
     info = {}
     self.num_steps += 1
@@ -69,9 +72,18 @@ class PointMaze2D(gym.GoalEnv):
     #     'desired_goal': self.g_xy,
     # }
 
+    if self.grid_pos:
+      grid_xy = np.round(s_xy)
+      grid_start_xy = grid_xy - 0.5
+      rel_grid_xy = s_xy - grid_start_xy
+      state = np.concatenate([s_xy, rel_grid_xy, wall_info])
+    else:
+      state = np.concatenate([s_xy, wall_info])
+
+
     obs = {
-      'image': s_xy,
-      'state': s_xy,
+      'image': state,
+      'state': state,
       'goal': self.g_xy,
       'image_goal': self.g_xy,
       'achieved_goal': s_xy
@@ -86,14 +98,22 @@ class PointMaze2D(gym.GoalEnv):
     self.s_xy = s_xy
     g_xy = np.array(self.maze.sample_goal(min_wall_dist=0.025 + self.dist_threshold))
     self.g_xy = g_xy
+    wall_info = self.maze.get_wall_info(s_xy)
+    if self.grid_pos:
+      grid_xy = np.round(s_xy)
+      grid_start_xy = grid_xy - 0.5
+      rel_grid_xy = s_xy - grid_start_xy
+      state = np.concatenate([s_xy, rel_grid_xy, wall_info])
+    else:
+      state = np.concatenate([s_xy, wall_info])
     # return {
         # 'observation': s_xy,
         # 'achieved_goal': s_xy,
         # 'desired_goal': g_xy,
     # }
     obs = {
-      'image': s_xy,
-      'state': s_xy,
+      'image': state,
+      'state': state,
       'goal': self.g_xy,
       'image_goal': self.g_xy,
       'achieved_goal': s_xy

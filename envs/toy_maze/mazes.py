@@ -268,6 +268,18 @@ class Maze:
                 break
         return loc[0], loc[1]
 
+    def get_wall_info(self, coord):
+        cx, cy = coord
+        grid_x = np.round(cx)
+        grid_y = np.round(cy)
+
+        wall_info = []
+        for direction in ['up', 'right', 'down', 'left']:
+            wall = self._wall_line((grid_x, grid_y), direction)
+            wall_info.append(float(wall in self._walls))
+        return np.array(wall_info)
+
+    # fina the info relevant to the wall information.
     def move(self, coord_start, coord_delta, depth=None):
         if depth is None:
             depth = 0
@@ -280,6 +292,7 @@ class Maze:
         loc_y1 = np.round(cy + dy)
         d_loc_x = int(np.abs(loc_x1 - loc_x0))
         d_loc_y = int(np.abs(loc_y1 - loc_y0))
+        # discretize based on the grids.
         xs_crossed = [loc_x0 + (np.sign(dx) * (i + 0.5)) for i in range(d_loc_x)]
         ys_crossed = [loc_y0 + (np.sign(dy) * (i + 0.5)) for i in range(d_loc_y)]
 
